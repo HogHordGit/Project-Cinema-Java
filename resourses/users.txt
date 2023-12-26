@@ -1,0 +1,15 @@
+---
+Login: user
+Password: 123
+Status: user
+---
+---
+Login: user2
+Password: 1234
+Status: user
+---
+---
+Login: gay
+Password: gay
+Status: admin
+---
