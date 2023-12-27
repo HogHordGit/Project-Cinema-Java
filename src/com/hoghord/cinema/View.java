@@ -29,7 +29,7 @@ public class View {
 
     public void adminInterface() {
         System.out.println("--------------------------------------------");
-        System.out.println("            Enter yout action               ");
+        System.out.println("            Enter your action               ");
         System.out.println("            1. Films list                   ");
         System.out.println("            2. Edit list of films           ");
         System.out.println("            3. Log out                      ");
@@ -50,5 +50,11 @@ public class View {
         System.out.println("     Enter your password for registration   ");
         System.out.println("--------------------------------------------");
         System.out.println("Enter: ");
+    }
+
+    public void filmList() {
+        System.out.println("--------------------------------------------");
+        System.out.println("          Here is films for you             ");
+
     }
 }
