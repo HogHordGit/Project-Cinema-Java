@@ -52,9 +52,13 @@ public class View {
         System.out.println("Enter: ");
     }
 
-    public void filmList() {
+    public void filmListHeader() {
         System.out.println("--------------------------------------------");
         System.out.println("          Here is films for you             ");
+
+    }
+    public void filmListEnd() {
+        System.out.println("--------------------------------------------");
 
     }
 }

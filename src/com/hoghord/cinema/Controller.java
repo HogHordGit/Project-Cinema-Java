@@ -1,13 +1,19 @@
 package com.hoghord.cinema;
 
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Controller {
 
+    static FilmsController filmsController = new FilmsController();
     static View view = new View();
     static User user;
     static UserController userReader = new UserController();
     Scanner scanner = new Scanner(System.in);
+
+    ArrayList<Films> filmsList;
 
     public void authorisedUser(User user) {
         if (user.getStatus().equals("admin")) {
@@ -27,6 +33,8 @@ public class Controller {
 
             switch (scanner.nextLine()) {
                 case "1": {
+                    view.filmListHeader();
+                    checkFilmsList(user.getStatus());
                     break;
                 }
                 case "2": {
@@ -47,13 +55,18 @@ public class Controller {
     public void logIn() {
         String login = scanner.nextLine();
 
+        Pattern regExp = Pattern.compile("/(\\s+)?\\w+|/+");
+        Matcher matcher = regExp.matcher(login.replaceAll(" ",""));
+
         if (login.isEmpty()) {
-            System.out.println("Вы ввели не коректные данные!");
+            System.out.println("Вы ввели не коректные данные");
             view.signLoginInterface();
             logIn();
-        }
-
-        if (login.equals("/reg")) {
+        } else if (matcher.matches()) {
+            System.out.println("Вы ввели консольную команду!");
+            view.signLoginInterface();
+            logIn();
+        } else if (login.replaceAll(" ","").equals("/reg")) {
             view.regLoginInterface();
             regUser();
         } else {
@@ -85,13 +98,29 @@ public class Controller {
                 regUser();
             }
 
-            if ((user = userReader.addUser(login, password)) != null) {
-                startApp();
-            }
+            if ((user = userReader.addUser(login, password)) != null) startApp();
+
         } else {
             System.out.println("Такой логин уже создан, выберите другой!");
             view.regLoginInterface();
             regUser();
+        }
+    }
+
+    public void checkFilmsList(String status) {
+        switch (status) {
+            case "admin": {
+                break;
+            }
+            case "user": {
+                filmsList = filmsController.findAllFilms();
+                System.out.println(filmsList);
+                break;
+            }
+            default: {
+
+                break;
+            }
         }
     }
 }

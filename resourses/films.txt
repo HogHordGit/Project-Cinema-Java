@@ -2,7 +2,7 @@
 Name: Hot boobs forever
 Day: Monday
 Date: 27-12-2023
-Time: 15:00:00, 18:00:00
+Time: 15:00:00, 18:00
 Tickets: 10
 Duration: 1.5
 ---
@@ -10,7 +10,7 @@ Duration: 1.5
 Name: Hot black boys
 Day: Monday
 Date: 27-12-2023
-Time: 16:00:00, 20:00:00
+Time: 16:00:00, 20:00
 Tickets: 15
 Duration: 1.5
 ---
@@ -18,7 +18,7 @@ Duration: 1.5
 Name: Hot black boys
 Day: Wednesday
 Date: 29-12-2023
-Time: 12:00:00, 14:00:00, 18:00:00
+Time: 12:00, 14:00, 18:00
 Tickets: 15
 Duration: 1.5
 ---
@@ -26,7 +26,7 @@ Duration: 1.5
 Name: Spanchbob right version
 Day: Tuesday
 Date: 27-12-2023
-Time: 13:00:00
+Time: 13:00
 Tickets: 2
 Duration: 1.5
 ---
