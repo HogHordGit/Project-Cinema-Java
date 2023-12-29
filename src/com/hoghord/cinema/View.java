@@ -38,6 +38,17 @@ public class View {
         System.out.println("Your chose: ");
     }
 
+    public void userInterface() {
+        System.out.println("--------------------------------------------");
+        System.out.println("            Enter your action               ");
+        System.out.println("            1. Films list                   ");
+        System.out.println("            2. Shopping basket?             ");
+        System.out.println("            3. Log out                      ");
+        System.out.println("            4. Exit                         ");
+        System.out.println("--------------------------------------------");
+        System.out.println("Your chose: ");
+    }
+
     public void regLoginInterface() {
         System.out.println("--------------------------------------------");
         System.out.println("      Enter your login for registration     ");

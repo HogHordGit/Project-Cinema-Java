@@ -1,6 +1,7 @@
 package com.hoghord.cinema;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,11 +19,96 @@ public class Controller {
     public void authorisedUser(User user) {
         if (user.getStatus().equals("admin")) {
             view.adminInterface();
+            actionWindowAfterLogIn();
 
         } else if (user.getStatus().equals("user")) {
-            System.out.println("chlen");
-            // интерфейс с листом фильмов
+            view.userInterface();
+            actionWindowAfterLogIn();
         }
+    }
+
+    public void checkFilmsList(String status) {
+        switch (status) {
+            case "admin": {
+                view.filmListHeader();
+                filmsList = filmsController.findAllFilms();
+                filmsController.printFilmList(filmsList);
+                view.filmListEnd();
+                break;
+            }
+            case "user": {
+                view.filmListHeader();
+                filmsList = filmsController.findAllFilms();
+                filmsController.printFilmList(filmsList);
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    }
+
+    public void actionWindowAfterLogIn() {
+        switch (user.getStatus()) {
+            case "admin": {
+                String action = scanner.nextLine();
+
+                switch (action.trim()) {
+                    case "1": {
+                        checkFilmsList(user.getStatus());
+                        break;
+                    }
+                    case "2": {
+                        break;
+                    }
+                    case "3": {
+                        user = null;
+                        startApp();
+                        break;
+                    }
+                    case "4": {
+                        break;
+                    }
+                    default: {
+                        System.out.println("Вы дебыл!");
+                        view.adminInterface();
+                        actionWindowAfterLogIn();
+                        break;
+                    }
+                }
+            }
+            case "user": {
+                String action = scanner.nextLine();
+
+                switch (action.trim()) {
+                    case "1": {
+                        checkFilmsList(user.getStatus());
+                        break;
+                    }
+                    case "2": {
+                        break;
+                    }
+                    case "3": {
+                        user = null;
+                        startApp();
+                        break;
+                    }
+                    case "4": {
+                        break;
+                    }
+                    default: {
+                        System.out.println("Вы дебыл!");
+                        view.userInterface();
+                        actionWindowAfterLogIn();
+                        break;
+                    }
+                }
+            }
+            default: {
+                break;
+            }
+        }
+
     }
 
     public void startApp() {
@@ -104,23 +190,6 @@ public class Controller {
             System.out.println("Такой логин уже создан, выберите другой!");
             view.regLoginInterface();
             regUser();
-        }
-    }
-
-    public void checkFilmsList(String status) {
-        switch (status) {
-            case "admin": {
-                break;
-            }
-            case "user": {
-                filmsList = filmsController.findAllFilms();
-                System.out.println(filmsList);
-                break;
-            }
-            default: {
-
-                break;
-            }
         }
     }
 }

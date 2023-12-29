@@ -15,7 +15,7 @@ public class FilmsController {
     private static final Pattern NAME_FILM_PAT = Pattern.compile("Name: (.+)");
     private static final Pattern DAY_FILM_PAT = Pattern.compile("Day: (.+)");
     private static final Pattern DATE_FILM_PAT = Pattern.compile("Date: (\\d{2}-\\d{2}-\\d{4})");
-    private static final Pattern TIME_FILM_PAT = Pattern.compile("Time: (\\d{2}:\\d{2}:\\d{2})");
+    private static final Pattern TIME_FILM_PAT = Pattern.compile("Time: (\\d{2}:\\d{2})");
     private static final Pattern TICKETS_FILM_PAT = Pattern.compile("Tickets: (\\d+)");
     private static final Pattern DURATION_FILM_PAT = Pattern.compile("Duration: (\\d+)");
 
@@ -44,21 +44,31 @@ public class FilmsController {
                 if (matcher.matches()) {
                     filmName = matcher.group(1);
 
+                    line = br.readLine().trim();
+
                     matcher = DAY_FILM_PAT.matcher(line);
                     if (matcher.matches()) {
                         filmDay = DaysOfWeek.valueOf(matcher.group(1));
+
+                        line = br.readLine().trim();
 
                         matcher = DATE_FILM_PAT.matcher(line);
                         if (matcher.matches()) {
                             filmDate = LocalDate.parse(matcher.group(1), EUROPEAN_FORMATTER);
 
+                            line = br.readLine().trim();
+
                             matcher = TIME_FILM_PAT.matcher(line);
                             if (matcher.matches()) {
                                 filmTime = LocalTime.parse(matcher.group(1), TIME_FORMATER);
 
+                                line = br.readLine().trim();
+
                                 matcher = TICKETS_FILM_PAT.matcher(line);
                                 if (matcher.matches()) {
                                     filmTickets = Short.parseShort(matcher.group(1));
+
+                                    line = br.readLine().trim();
 
                                     matcher = DURATION_FILM_PAT.matcher(line);
                                     if (matcher.matches()) {
@@ -77,5 +87,16 @@ public class FilmsController {
         }
 
         return films;
+    }
+
+    public void printFilmList(ArrayList<Films> array) {
+        for (short i = 0; i < array.size(); i++) {
+            System.out.println(1 + i + ") " + array.get(i).getName() + "\n" +
+                    array.get(i).getDay() + " / " +  array.get(i).getDate() + "\n" +
+                    "today: " + array.get(i).getTime() + "\n"
+            );
+        }
+
+
     }
 }
