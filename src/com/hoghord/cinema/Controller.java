@@ -1,7 +1,6 @@
 package com.hoghord.cinema;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,23 +26,32 @@ public class Controller {
         }
     }
 
-    public void checkFilmsList(String status) {
-        switch (status) {
-            case "admin": {
-                view.filmListHeader();
-                filmsList = filmsController.findAllFilms();
-                filmsController.printFilmList(filmsList);
-                view.filmListEnd();
-                break;
-            }
-            case "user": {
-                view.filmListHeader();
-                filmsList = filmsController.findAllFilms();
-                filmsController.printFilmList(filmsList);
-                break;
-            }
-            default: {
-                break;
+    public void showFilmsList() {
+        view.filmListHeader();
+        filmsList = filmsController.findAllFilms();
+        filmsController.printFilmList(filmsList);
+        actionAfterShowFilmList();
+    }
+
+    public void actionAfterShowFilmList() {
+        if(user != null) {
+
+        } else {
+            view.noAuthorisedShowAfterChoseFilm();
+
+            switch (scanner.nextLine()) {
+                case "1": {
+                    logIn();
+                    break;
+                }
+                case "2": {
+                    break;
+                }
+                default: {
+                    System.out.println("Иди нахуй!");
+                    actionAfterShowFilmList();
+                    break;
+                }
             }
         }
     }
@@ -55,7 +63,7 @@ public class Controller {
 
                 switch (action.trim()) {
                     case "1": {
-                        checkFilmsList(user.getStatus());
+                        showFilmsList();
                         break;
                     }
                     case "2": {
@@ -82,7 +90,7 @@ public class Controller {
 
                 switch (action.trim()) {
                     case "1": {
-                        checkFilmsList(user.getStatus());
+                        showFilmsList();
                         break;
                     }
                     case "2": {
@@ -119,12 +127,10 @@ public class Controller {
 
             switch (scanner.nextLine()) {
                 case "1": {
-                    view.filmListHeader();
-                    checkFilmsList(user.getStatus());
+                    showFilmsList();
                     break;
                 }
                 case "2": {
-                    view.signLoginInterface();
                     logIn();
                     break;
                 }
@@ -139,6 +145,8 @@ public class Controller {
     }
 
     public void logIn() {
+        view.signLoginInterface();
+
         String login = scanner.nextLine();
 
         Pattern regExp = Pattern.compile("/(\\s+)?\\w+|/+");

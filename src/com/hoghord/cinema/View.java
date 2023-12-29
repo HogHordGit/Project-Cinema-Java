@@ -69,7 +69,25 @@ public class View {
 
     }
     public void filmListEnd() {
-        System.out.println("--------------------------------------------");
-
+        System.out.println("---------------------------------------------");
+        System.out.println("Введите номер фильма для просмотра информации");
+        System.out.println("      Для поиска фильма напишите /find       ");
+        System.out.println("     Или напишите /back, чтобы вернутся      ");
+        System.out.println("---------------------------------------------");
+        System.out.println("Enter: ");
     }
+
+    public void noAuthorisedShowAfterChoseFilm() {
+        System.out.println("--------------------------------------------");
+        System.out.println("    Чтобы узнать всю информацию про фильм   ");
+        System.out.println("              или купить билет              ");
+        System.out.println("         ВАМ нужно войти в систему!         ");
+        System.out.println("--------------------------------------------");
+        System.out.println("            Enter your action               ");
+        System.out.println("            1. Sign up / sign in            ");
+        System.out.println("            2. Exit                         ");
+        System.out.println("--------------------------------------------");
+        System.out.println("Enter: ");
+    }
+
 }
