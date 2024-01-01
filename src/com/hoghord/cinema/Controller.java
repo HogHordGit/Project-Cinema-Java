@@ -156,13 +156,13 @@ public class Controller {
             System.out.println("Вы ввели не коректные данные");
             view.signLoginInterface();
             logIn();
+        } else if (login.replaceAll(" ","").equals("/reg")) {
+                view.regLoginInterface();
+                regUser();
         } else if (matcher.matches()) {
             System.out.println("Вы ввели консольную команду!");
             view.signLoginInterface();
             logIn();
-        } else if (login.replaceAll(" ","").equals("/reg")) {
-            view.regLoginInterface();
-            regUser();
         } else {
             view.signPassInterface();
 
