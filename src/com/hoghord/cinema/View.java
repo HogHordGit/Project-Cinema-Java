@@ -97,7 +97,7 @@ public class View {
         System.out.println("              Примеры для ввода:            ");
         System.out.println("    По названию: Big small coins            ");
         System.out.println("    Количество мест: 2                      ");
-        System.out.println("    Датой или временем: 27-12-2023/13.00    ");
+        System.out.println("    Датой или временем: 27-12-2023/13:00    ");
         System.out.println("Enter: ");
     }
 

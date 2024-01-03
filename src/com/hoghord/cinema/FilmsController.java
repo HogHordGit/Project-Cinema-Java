@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +29,8 @@ public class FilmsController {
     private static final String FILE_PATH = "resourses/films.txt";
 
     private static DaysOfWeek todaysDay = DaysOfWeek.valueOf("MONDAY");
+
+    ArrayList<Films> sortedFilms = new ArrayList<>();
 
     public ArrayList<Films> findAllFilms() {
 
@@ -116,6 +119,7 @@ public class FilmsController {
         String soutResult;
 
         for (short i = 0; i < array.size(); i++) {
+            System.out.println(i);
             soutResult = 1 + i + ") " + array.get(i).getName() + "\n" +
                     array.get(i).getDay() + " / " +  array.get(i).getDate() + "\n";
 
@@ -129,23 +133,49 @@ public class FilmsController {
     }
 
     public String findFilmByArgument(ArrayList<Films> array, String value) {
-
-        boolean DATE = Pattern.compile("(\\d{2}-\\d{2}-\\d{4})").matcher(value).matches();
-        boolean TIME = Pattern.compile("(\\d{2}:\\d{2})").matcher(value).matches();
-        boolean TICKETS = Pattern.compile("(\\d+)").matcher(value).matches();
-        boolean NAME = Pattern.compile("(.+)").matcher(value).matches();
-
         String result = "zib";
 
-        if (DATE || TIME || TICKETS || NAME) {
-            for(int i = 0; i < array.size(); i++) {
-                System.out.println("for");
-            }
-
-            return result;
+        if(Pattern.compile("(\\d{2}-\\d{2}-\\d{4})").matcher(value).matches()) {
+            findFilmByDate(array, LocalDate.parse(value, EUROPEAN_FORMATTER));
+        } else if (Pattern.compile("(\\d{2}:\\d{2})").matcher(value).matches()) {
+            findFilmByTime(array, LocalTime.parse(value, TIME_FORMATER));
+        } else if (Pattern.compile("(\\d+)").matcher(value).matches()) {
+            findFilmByTicket(array, Short.parseShort(value));
+        } else if (Pattern.compile("(^\\w+$)").matcher(value.replaceAll(" ","").trim()).matches()) {
+            findFilmByName(array, value);
         } else {
             System.out.println("Вы ввели некоректный формат");
             return "false";
         }
+
+        return "true";
+    }
+
+    public void findFilmByDate(ArrayList<Films> array, LocalDate value) {
+        for (short i = 0; i < array.size(); i++) {
+            if (array.get(i).getDate().equals(value)) sortedFilms.add(array.get(i));
+        }
+        printFilmList(sortedFilms);
+    }
+
+    public void findFilmByTime(ArrayList<Films> array, LocalTime value) {
+        for (short i = 0; i < array.size(); i++) {
+            if (array.get(i).getTime().equals(value)) sortedFilms.add(array.get(i));
+        }
+        printFilmList(sortedFilms);
+    }
+
+    public void findFilmByTicket(ArrayList<Films> array, Short value) {
+        for (short i = 0; i < array.size(); i++) {
+            if (array.get(i).getTickets().equals(value)) sortedFilms.add(array.get(i));
+        }
+        printFilmList(sortedFilms);
+    }
+
+    public void findFilmByName(ArrayList<Films> array, String value) {
+        for (short i = 0; i < array.size(); i++) {
+            if (array.get(i).getName().equals(value)) sortedFilms.add(array.get(i));
+        }
+        printFilmList(sortedFilms);
     }
 }
