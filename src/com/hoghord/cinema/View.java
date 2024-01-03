@@ -70,7 +70,7 @@ public class View {
     public void authorisedShowAfterChoseFilm() {
         System.out.println("---------------------------------------------");
         System.out.println("Введите номер фильма для просмотра информации");
-        System.out.println("      Для поиска фильма напишите /find       ");
+        System.out.println("    Для фильтрации фильмов напишите /find    ");
         System.out.println("     Или напишите /back, чтобы вернутся      ");
         System.out.println("---------------------------------------------");
         System.out.println("Enter: ");
