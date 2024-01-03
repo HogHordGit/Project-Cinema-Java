@@ -1,8 +1,6 @@
 package com.hoghord.cinema;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -115,11 +113,41 @@ public class FilmsController {
         return films;
     }
 
+    public void buyTicketAfterSearching(Films films) {
+        try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
+            String line;
+            StringBuilder content = new StringBuilder();
+
+            while ((line = br.readLine()) != null) {
+                if (line.contains("Name: " + films.getName())) {
+                    content.append(line).append("\n");
+                    line = br.readLine().trim();
+
+                    if (line.matches("Tickets: (\\d+)")) {
+                        int num = Integer.parseInt(line.replaceAll("Tickets: ", "").trim());
+                        num--;
+
+                        line = line.replaceFirst("Tickets: \\d+", "Tickets: " + num);
+                    }
+                }
+                content.append(line).append("\n");
+            }
+
+            // Записываем новое содержимое в файл
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
+                bw.write(content.toString());
+                System.out.println("Билет успешно куплен!");
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void printFilmList(ArrayList<Films> array) {
         String soutResult;
 
         for (short i = 0; i < array.size(); i++) {
-            System.out.println(i);
             soutResult = 1 + i + ") " + array.get(i).getName() + "\n" +
                     array.get(i).getDay() + " / " +  array.get(i).getDate() + "\n";
 
@@ -132,64 +160,81 @@ public class FilmsController {
         }
     }
 
-    public String findFilmByArgument(ArrayList<Films> array, String value) {
-        if(Pattern.compile("(\\d{2}-\\d{2}-\\d{4})").matcher(value).matches()) {
-            findFilmByDate(array, LocalDate.parse(value, EUROPEAN_FORMATTER));
-        } else if (Pattern.compile("(\\d{2}:\\d{2})").matcher(value).matches()) {
-            findFilmByTime(array, LocalTime.parse(value, TIME_FORMATER));
-        } else if (Pattern.compile("(\\d+)").matcher(value).matches()) {
-            findFilmByTicket(array, Integer.parseInt(value));
-        } else if (Pattern.compile("(^\\w+$)").matcher(value.replaceAll(" ","").trim()).matches()) {
-            findFilmByName(array, value);
-        } else {
-            System.out.println("Вы ввели некоректный формат");
-            return "false";
-        }
-
-        return "true";
+    public void printInfoAboutChosenFilm(Films films) {
+        System.out.println("Name: " + films.getName() + "\n"
+                + films.getDescription() + "\n" + "\n"
+                + "Продолжительность: " + films.getDuration() + "\n" + "\n"
+                + films.getDate() + "/" + films.getTime() + "\n"
+                + films.getDay() + "\n" + "\n"
+                + "Доступные билеты: " + films.getTickets() + "\n"
+                + "Цена билета: " + films.getPrise()
+        );
     }
 
-    public void findFilmByDate(ArrayList<Films> array, LocalDate value) {
+    public ArrayList<Films> findFilmByArgument(ArrayList<Films> array, String value) {
+        if(Pattern.compile("(\\d{2}-\\d{2}-\\d{4})").matcher(value).matches()) {
+            return findFilmByDate(array, LocalDate.parse(value, EUROPEAN_FORMATTER));
+        } else if (Pattern.compile("(\\d{2}:\\d{2})").matcher(value).matches()) {
+            return findFilmByTime(array, LocalTime.parse(value, TIME_FORMATER));
+        } else if (Pattern.compile("(\\d+)").matcher(value).matches()) {
+            return findFilmByTicket(array, Integer.parseInt(value));
+        } else if (Pattern.compile("(^\\w+$)").matcher(value.replaceAll(" ","").trim()).matches()) {
+            return findFilmByName(array, value);
+        } else {
+            System.out.println("Вы ввели некоректный формат");
+            return sortedFilms;
+        }
+    }
+
+    public ArrayList<Films> findFilmByDate(ArrayList<Films> array, LocalDate value) {
         for (short i = 0; i < array.size(); i++) {
             if (array.get(i).getDate().equals(value)) sortedFilms.add(array.get(i));
         }
         if (sortedFilms.isEmpty()) {
             System.out.println("Фильм/фильмы не были найдена по вашему запросу.");
+            return sortedFilms;
         } else {
             printFilmList(sortedFilms);
+            return sortedFilms;
         }
     }
 
-    public void findFilmByTime(ArrayList<Films> array, LocalTime value) {
+    public ArrayList<Films> findFilmByTime(ArrayList<Films> array, LocalTime value) {
         for (short i = 0; i < array.size(); i++) {
             if (array.get(i).getTime().equals(value)) sortedFilms.add(array.get(i));
         }
         if (sortedFilms.isEmpty()) {
             System.out.println("Фильм/фильмы не были найдена по вашему запросу.");
+            return sortedFilms;
         } else {
             printFilmList(sortedFilms);
+            return sortedFilms;
         }
     }
 
-    public void findFilmByTicket(ArrayList<Films> array, Integer value) {
+    public ArrayList<Films> findFilmByTicket(ArrayList<Films> array, Integer value) {
         for (short i = 0; i < array.size(); i++) {
             if (value <= array.get(i).getTickets()) sortedFilms.add(array.get(i));
         }
         if (sortedFilms.isEmpty()) {
             System.out.println("Фильм/фильмы не были найдена по вашему запросу.");
+            return sortedFilms;
         } else {
             printFilmList(sortedFilms);
+            return sortedFilms;
         }
     }
 
-    public void findFilmByName(ArrayList<Films> array, String value) {
+    public ArrayList<Films> findFilmByName(ArrayList<Films> array, String value) {
         for (short i = 0; i < array.size(); i++) {
             if (array.get(i).getName().trim().equalsIgnoreCase(value.trim())) sortedFilms.add(array.get(i));
         }
         if (sortedFilms.isEmpty()) {
             System.out.println("Фильм/фильмы не были найдена по вашему запросу.");
+            return sortedFilms;
         } else {
             printFilmList(sortedFilms);
+            return sortedFilms;
         }
     }
 }

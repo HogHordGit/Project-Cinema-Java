@@ -1,5 +1,7 @@
 package com.hoghord.cinema;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -33,6 +35,43 @@ public class Controller {
         actionAfterShowFilmList();
     }
 
+    public void selectFilmByNum() {
+        view.selectFilmAfterSorting();
+
+        String action = scanner.nextLine();
+
+        if (action.equals("/back")) {
+
+        } else if (Integer.parseInt(action) > (filmsList.size() + 1) || Integer.parseInt(action) < 0) {
+            System.out.println("Вы дебил!");
+            selectFilmByNum();
+        } else {
+            filmsController.printInfoAboutChosenFilm(filmsList.get(Integer.parseInt(action) - 1));
+            buyTicketBySelectedFilm(filmsList.get(Integer.parseInt(action) - 1));
+        }
+    }
+
+    public void buyTicketBySelectedFilm(Films films) {
+        view.askToBuyATicket();
+
+        switch (scanner.nextLine()) {
+            case "yes": {
+                filmsController.buyTicketAfterSearching(films);
+                authorisedUser(user);
+                break;
+            }
+            case "no": {
+                authorisedUser(user);
+                break;
+            }
+            default: {
+                System.out.println("Вы дебил!");
+                buyTicketBySelectedFilm(films);
+                break;
+            }
+        }
+    }
+
     public void actionAfterShowFilmList() {
         if(user != null) {
             view.authorisedShowAfterChoseFilm();
@@ -42,7 +81,9 @@ public class Controller {
             if (action.equals("/find")) {
                 view.showActionsForFindingFilm();
 
-                if (filmsController.findFilmByArgument(filmsList, scanner.nextLine()).equals("false")) actionAfterShowFilmList();
+                if ((filmsList = filmsController.findFilmByArgument(filmsList, scanner.nextLine())).isEmpty()) actionAfterShowFilmList();
+
+                selectFilmByNum();
 
             } else if (action.equals("/back")) {
                 authorisedUser(user);

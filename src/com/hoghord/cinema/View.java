@@ -98,7 +98,24 @@ public class View {
         System.out.println("    По названию: Big small coins            ");
         System.out.println("    Количество мест: 2                      ");
         System.out.println("    Датой или временем: 27-12-2023/13:00    ");
+        System.out.println("       Нажмите Enter для возврата           ");
+        System.out.println("--------------------------------------------");
         System.out.println("Enter: ");
     }
 
+    public void selectFilmAfterSorting() {
+        System.out.println("---------------------------------------------");
+        System.out.println("Введите номер фильма для просмотра информации");
+        System.out.println("     Или напишите /back, чтобы вернутся      ");
+        System.out.println("---------------------------------------------");
+        System.out.println("Enter: ");
+    }
+
+    public void askToBuyATicket() {
+        System.out.println("----------------------------------------------");
+        System.out.println(" Вы хотите купить билет/билеты на этот фильм? ");
+        System.out.println("               Введите yes/no                 ");
+        System.out.println("----------------------------------------------");
+        System.out.println("Enter: ");
+    }
 }
