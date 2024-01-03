@@ -1,32 +1,40 @@
 ---
 Name: Hot boobs forever
+Tickets: 10
 Day: MONDAY
 Date: 27-12-2023
 Time: 15:00
-Tickets: 10
 Duration: 90
+Prise: 4.99$
+Description: Good film with excellent plot
 ---
 ---
 Name: Hot black boys
-Day: MONDAY
-Date: 27-12-2023
+Tickets: 15
+Day: TUESDAY
+Date: 28-12-2023
 Time: 16:00
-Tickets: 15
 Duration: 90
----
----
-Name: Hot black boys
-Day: WEDNESDAY
-Date: 29-12-2023
-Time: 12:00
-Tickets: 15
-Duration: 90
+Prise: 4.99$
+Description: Good film with excellent plot
 ---
 ---
 Name: Spanchbob right version
-Day: TUESDAY
-Date: 27-12-2023
-Time: 13:00
 Tickets: 2
+Day: WEDNESDAY
+Date: 29-12-2023
+Time: 13:00
 Duration: 90
+Prise: 4.99$
+Description: Good film with excellent plot
+---
+---
+Name: Big and small coins
+Tickets: 0
+Day: FRIDAY
+Date: 31-12-2023
+Time: 17:00
+Duration: 90
+Prise: 4.99$
+Description: Good film with excellent plot
 ---

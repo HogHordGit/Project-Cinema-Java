@@ -42,9 +42,8 @@ public class View {
         System.out.println("--------------------------------------------");
         System.out.println("            Enter your action               ");
         System.out.println("            1. Films list                   ");
-        System.out.println("            2. Shopping basket?             ");
-        System.out.println("            3. Log out                      ");
-        System.out.println("            4. Exit                         ");
+        System.out.println("            2. Log out                      ");
+        System.out.println("            3. Exit                         ");
         System.out.println("--------------------------------------------");
         System.out.println("Your chose: ");
     }
@@ -68,7 +67,7 @@ public class View {
         System.out.println("          Here is films for you             ");
 
     }
-    public void filmListEnd() {
+    public void authorisedShowAfterChoseFilm() {
         System.out.println("---------------------------------------------");
         System.out.println("Введите номер фильма для просмотра информации");
         System.out.println("      Для поиска фильма напишите /find       ");
@@ -87,6 +86,18 @@ public class View {
         System.out.println("            1. Sign up / sign in            ");
         System.out.println("            2. Exit                         ");
         System.out.println("--------------------------------------------");
+        System.out.println("Enter: ");
+    }
+
+    public void showActionsForFindingFilm() {
+        System.out.println("--------------------------------------------");
+        System.out.println("     Напишите критерий по которому нужно    ");
+        System.out.println("             найти фильм/фильмы             ");
+        System.out.println("--------------------------------------------");
+        System.out.println("              Примеры для ввода:            ");
+        System.out.println("    По названию: Big small coins            ");
+        System.out.println("    Количество мест: 2                      ");
+        System.out.println("    Датой или временем: 27-12-2023/13.00    ");
         System.out.println("Enter: ");
     }
 

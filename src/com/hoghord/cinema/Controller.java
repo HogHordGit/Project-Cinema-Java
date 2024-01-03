@@ -35,7 +35,26 @@ public class Controller {
 
     public void actionAfterShowFilmList() {
         if(user != null) {
+            view.authorisedShowAfterChoseFilm();
 
+            String action = scanner.nextLine();
+
+            if (action.equals("/find")) {
+                view.showActionsForFindingFilm();
+
+                if (filmsController.findFilmByArgument(filmsList, scanner.nextLine()).equals("false")) actionAfterShowFilmList();
+
+            } else if (action.equals("/back")) {
+                authorisedUser(user);
+            } else {
+                try {
+                    int intValue = Integer.parseInt(action);
+                    System.out.println("Число: " + intValue);
+                } catch (NumberFormatException e) {
+                    System.out.println("Вы дебил!");
+                    actionAfterShowFilmList();
+                }
+            }
         } else {
             view.noAuthorisedShowAfterChoseFilm();
 
@@ -48,7 +67,7 @@ public class Controller {
                     break;
                 }
                 default: {
-                    System.out.println("Иди нахуй!");
+                    System.out.println("Вы дебил!");
                     actionAfterShowFilmList();
                     break;
                 }

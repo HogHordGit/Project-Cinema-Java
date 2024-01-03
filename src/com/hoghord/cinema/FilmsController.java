@@ -1,7 +1,6 @@
 package com.hoghord.cinema;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -19,10 +18,16 @@ public class FilmsController {
     private static final Pattern TICKETS_FILM_PAT = Pattern.compile("Tickets: (\\d+)");
     private static final Pattern DURATION_FILM_PAT = Pattern.compile("Duration: (\\d+)");
 
+    private static final Pattern PRISE_FILM_PAT = Pattern.compile("Prise: (\\d+\\.\\d+\\$)");
+
+    private static final Pattern DESCRIPTION_FILM_PAT = Pattern.compile("Description: (.+)");
+
     private static final DateTimeFormatter EUROPEAN_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private static final DateTimeFormatter TIME_FORMATER = DateTimeFormatter.ofPattern("HH:mm");
 
     private static final String FILE_PATH = "resourses/films.txt";
+
+    private static DaysOfWeek todaysDay = DaysOfWeek.valueOf("MONDAY");
 
     public ArrayList<Films> findAllFilms() {
 
@@ -34,6 +39,8 @@ public class FilmsController {
         LocalTime filmTime;
         Short filmTickets;
         Integer filmDuration;
+        String filmPrise;
+        String filmDescription;
 
         try(BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
@@ -46,27 +53,29 @@ public class FilmsController {
 
                     line = br.readLine().trim();
 
-                    matcher = DAY_FILM_PAT.matcher(line);
+                    matcher = TICKETS_FILM_PAT.matcher(line);
                     if (matcher.matches()) {
-                        filmDay = DaysOfWeek.valueOf(matcher.group(1));
+                        filmTickets = Short.parseShort(matcher.group(1));
+
+                        if (filmTickets == 0) continue;
 
                         line = br.readLine().trim();
 
-                        matcher = DATE_FILM_PAT.matcher(line);
+                        matcher = DAY_FILM_PAT.matcher(line);
                         if (matcher.matches()) {
-                            filmDate = LocalDate.parse(matcher.group(1), EUROPEAN_FORMATTER);
+                            filmDay = DaysOfWeek.valueOf(matcher.group(1));
 
                             line = br.readLine().trim();
 
-                            matcher = TIME_FILM_PAT.matcher(line);
+                            matcher = DATE_FILM_PAT.matcher(line);
                             if (matcher.matches()) {
-                                filmTime = LocalTime.parse(matcher.group(1), TIME_FORMATER);
+                                filmDate = LocalDate.parse(matcher.group(1), EUROPEAN_FORMATTER);
 
                                 line = br.readLine().trim();
 
-                                matcher = TICKETS_FILM_PAT.matcher(line);
+                                matcher = TIME_FILM_PAT.matcher(line);
                                 if (matcher.matches()) {
-                                    filmTickets = Short.parseShort(matcher.group(1));
+                                    filmTime = LocalTime.parse(matcher.group(1), TIME_FORMATER);
 
                                     line = br.readLine().trim();
 
@@ -74,7 +83,21 @@ public class FilmsController {
                                     if (matcher.matches()) {
                                         filmDuration = Integer.parseInt(matcher.group(1));
 
-                                        films.add(new Films(filmName, filmDay, filmDate, filmTime, filmTickets, filmDuration));
+                                        line = br.readLine().trim();
+
+                                        matcher = PRISE_FILM_PAT.matcher(line);
+                                        if (matcher.matches()) {
+                                            filmPrise = matcher.group(1);
+
+                                            line = br.readLine().trim();
+
+                                            matcher = DESCRIPTION_FILM_PAT.matcher(line);
+                                            if (matcher.matches()) {
+                                                filmDescription = matcher.group(1);
+
+                                                films.add(new Films(filmName, filmDay, filmDate, filmTime, filmTickets, filmDuration, filmPrise, filmDescription));
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -90,13 +113,39 @@ public class FilmsController {
     }
 
     public void printFilmList(ArrayList<Films> array) {
+        String soutResult;
+
         for (short i = 0; i < array.size(); i++) {
-            System.out.println(1 + i + ") " + array.get(i).getName() + "\n" +
-                    array.get(i).getDay() + " / " +  array.get(i).getDate() + "\n" +
-                    "today: " + array.get(i).getTime() + "\n"
-            );
+            soutResult = 1 + i + ") " + array.get(i).getName() + "\n" +
+                    array.get(i).getDay() + " / " +  array.get(i).getDate() + "\n";
+
+            if (todaysDay == array.get(i).getDay()) soutResult += "today: " + array.get(i).getTime() + "\n";
+            else {
+                soutResult += array.get(i).getTime() + "\n";
+            }
+
+            System.out.println(soutResult);
         }
+    }
 
+    public String findFilmByArgument(ArrayList<Films> array, String value) {
 
+        boolean DATE = Pattern.compile("(\\d{2}-\\d{2}-\\d{4})").matcher(value).matches();
+        boolean TIME = Pattern.compile("(\\d{2}:\\d{2})").matcher(value).matches();
+        boolean TICKETS = Pattern.compile("(\\d+)").matcher(value).matches();
+        boolean NAME = Pattern.compile("(.+)").matcher(value).matches();
+
+        String result = "zib";
+
+        if (DATE || TIME || TICKETS || NAME) {
+            for(int i = 0; i < array.size(); i++) {
+                System.out.println("for");
+            }
+
+            return result;
+        } else {
+            System.out.println("Вы ввели некоректный формат");
+            return "false";
+        }
     }
 }
