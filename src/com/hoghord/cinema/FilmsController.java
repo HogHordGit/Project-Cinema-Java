@@ -238,20 +238,10 @@ public class FilmsController {
             return sortedFilms;
         }
     }
-//    Name: Hot boobs forever
-//    Tickets: 10
-//    Day: MONDAY
-//    Date: 27-12-2023
-//    Time: 15:00
-//    Duration: 90
-//    Prise: 4.99$
-//    Description: Good film with excellent plot
-
-//    123, 123, FRIDAY, 12-12-1221, 12:21, 123, 123$, 123
 
     public void addFilmToListByAdmin(String film) {
         Pattern[] patArray = {Pattern.compile("(.+)"), Pattern.compile("(\\d+)"),
-                Pattern.compile("(.+)"), Pattern.compile("(\\d{2}-\\d{2}-\\d{4})"),
+                Pattern.compile(""), Pattern.compile("(\\d{2}-\\d{2}-\\d{4})"),
                 Pattern.compile("(\\d{2}:\\d{2})"), Pattern.compile("(\\d+)"),
                 Pattern.compile("((\\d+\\.\\d+\\$)|(\\d+)\\$)"), Pattern.compile("(.+)")};
         String[] infoStrArray = {"Name: ", "Tickets: ", "Day: ", "Date: ", "Time: ", "Duration: ", "Prise: ", "Description: "};

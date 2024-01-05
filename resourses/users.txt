@@ -23,3 +23,8 @@ Login: uuuu
 Password: 123
 Status: user
 ---
+---
+Login: MishaLox
+Password: MishaLox123
+Status: user
+---

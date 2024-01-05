@@ -65,7 +65,6 @@ public class View {
     public void filmListHeader() {
         System.out.println("--------------------------------------------");
         System.out.println("          Here is films for you             ");
-
     }
     public void authorisedShowAfterChoseFilm() {
         System.out.println("---------------------------------------------");
@@ -121,7 +120,7 @@ public class View {
 
     public void selectActionAfterChoseEdit() {
         System.out.println("--------------------------------------------");
-        System.out.println("            Enter yout action               ");
+        System.out.println("            Enter your action               ");
         System.out.println("            1. Редактировать фильм          ");
         System.out.println("            2. Добавить фильм               ");
         System.out.println("            3. Назад                        ");
@@ -133,7 +132,7 @@ public class View {
         System.out.println("--------------------------------------------------------------");
         System.out.println("            Введите данные о фильме через запятую             ");
         System.out.println("                  Формат записи для фильма:                   ");
-        System.out.println(" name, tickets, day, date, time, duration, prise, description ");
+        System.out.println(" name, tickets, DAY, date, time, duration, prise, description ");
         System.out.println("--------------------------------------------------------------");
     }
 }

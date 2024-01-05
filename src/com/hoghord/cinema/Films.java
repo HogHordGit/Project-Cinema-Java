@@ -72,10 +72,3 @@ public class Films {
                 '}';
     }
 }
-
-//Name: Hot boobs forever
-//Day: Monday
-//Date: 27-12-2023
-//Time: 15:00:00, 18:00:00
-//Tickets: 10
-//Duration: 90

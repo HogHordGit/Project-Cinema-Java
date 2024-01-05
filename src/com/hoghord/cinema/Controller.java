@@ -101,7 +101,7 @@ public class Controller {
                     actionAfterShowFilmList();
                 }
 
-                selectFilmByNumAllFilms(Integer.parseInt(action)); // dwasdwasdwadsdaw
+                selectFilmByNumAllFilms(Integer.parseInt(action));
             }
         } else {
             view.noAuthorisedShowAfterChoseFilm();
@@ -138,7 +138,6 @@ public class Controller {
 
                 filmsController.addFilmToListByAdmin(scanner.nextLine());
                 actionWindowAfterLogInForAdmin();
-
                 break;
             }
             case "3": {
@@ -149,8 +148,6 @@ public class Controller {
     }
 
     public void actionWindowAfterLogIn() {
-        System.out.println("1");
-
         switch (user.getStatus()) {
             case "admin": {
                 String action = scanner.nextLine();
