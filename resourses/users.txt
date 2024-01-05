@@ -13,3 +13,13 @@ Login: gay
 Password: gay
 Status: admin
 ---
+---
+Login: pisun
+Password: 123
+Status: user
+---
+---
+Login: uuuu
+Password: 123
+Status: user
+---

@@ -118,4 +118,22 @@ public class View {
         System.out.println("----------------------------------------------");
         System.out.println("Enter: ");
     }
+
+    public void selectActionAfterChoseEdit() {
+        System.out.println("--------------------------------------------");
+        System.out.println("            Enter yout action               ");
+        System.out.println("            1. Редактировать фильм          ");
+        System.out.println("            2. Добавить фильм               ");
+        System.out.println("            3. Назад                        ");
+        System.out.println("--------------------------------------------");
+        System.out.println("Your chose: ");
+    }
+
+    public void showToAdminCorrectFormatToAddFilm() {
+        System.out.println("--------------------------------------------------------------");
+        System.out.println("            Введите данные о фильме через запятую             ");
+        System.out.println("                  Формат записи для фильма:                   ");
+        System.out.println(" name, tickets, day, date, time, duration, prise, description ");
+        System.out.println("--------------------------------------------------------------");
+    }
 }

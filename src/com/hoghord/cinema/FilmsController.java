@@ -1,11 +1,13 @@
 package com.hoghord.cinema;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,7 +26,7 @@ public class FilmsController {
     private static final DateTimeFormatter EUROPEAN_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private static final DateTimeFormatter TIME_FORMATER = DateTimeFormatter.ofPattern("HH:mm");
 
-    private static final String FILE_PATH = "resourses/films.txt";
+    private static final String FILE_PATH = "out/production/Cinema/films.txt";
 
     private static DaysOfWeek todaysDay = DaysOfWeek.valueOf("MONDAY");
 
@@ -124,8 +126,7 @@ public class FilmsController {
                     line = br.readLine().trim();
 
                     if (line.matches("Tickets: (\\d+)")) {
-                        int num = Integer.parseInt(line.replaceAll("Tickets: ", "").trim());
-                        num--;
+                        int num = Integer.parseInt(line.replaceAll("Tickets: ", "").trim()) - 1;
 
                         line = line.replaceFirst("Tickets: \\d+", "Tickets: " + num);
                     }
@@ -217,7 +218,7 @@ public class FilmsController {
             if (value <= array.get(i).getTickets()) sortedFilms.add(array.get(i));
         }
         if (sortedFilms.isEmpty()) {
-            System.out.println("Фильм/фильмы не были найдена по вашему запросу.");
+            System.out.println("Фильм/фильмы не были найдены по вашему запросу.");
             return sortedFilms;
         } else {
             printFilmList(sortedFilms);
@@ -235,6 +236,55 @@ public class FilmsController {
         } else {
             printFilmList(sortedFilms);
             return sortedFilms;
+        }
+    }
+//    Name: Hot boobs forever
+//    Tickets: 10
+//    Day: MONDAY
+//    Date: 27-12-2023
+//    Time: 15:00
+//    Duration: 90
+//    Prise: 4.99$
+//    Description: Good film with excellent plot
+
+//    123, 123, FRIDAY, 12-12-1221, 12:21, 123, 123$, 123
+
+    public void addFilmToListByAdmin(String film) {
+        Pattern[] patArray = {Pattern.compile("(.+)"), Pattern.compile("(\\d+)"),
+                Pattern.compile("(.+)"), Pattern.compile("(\\d{2}-\\d{2}-\\d{4})"),
+                Pattern.compile("(\\d{2}:\\d{2})"), Pattern.compile("(\\d+)"),
+                Pattern.compile("((\\d+\\.\\d+\\$)|(\\d+)\\$)"), Pattern.compile("(.+)")};
+        String[] infoStrArray = {"Name: ", "Tickets: ", "Day: ", "Date: ", "Time: ", "Duration: ", "Prise: ", "Description: "};
+        String[] array = film.split(", ");
+
+        String result = "";
+
+        try(FileWriter fw = new FileWriter(FILE_PATH, true);
+        BufferedWriter bw = new BufferedWriter(fw)) {
+            if (patArray.length == array.length) {
+                Matcher matcher;
+
+                for (int i = 0; i < array.length; i++) {
+                    matcher = patArray[i].matcher(array[i]);
+
+                    if (matcher.matches()) {
+                        result += infoStrArray[i] + array[i] + "\n";
+                    }
+                }
+
+                bw.newLine();
+                bw.write("---");
+                bw.newLine();
+
+                bw.write(result);
+
+                bw.write("---");
+                System.out.println("Фильм успешно добавлен");
+            } else {
+                System.out.println("Админ ты конч, заново!");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

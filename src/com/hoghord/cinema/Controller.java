@@ -1,7 +1,5 @@
 package com.hoghord.cinema;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -35,22 +33,6 @@ public class Controller {
         actionAfterShowFilmList();
     }
 
-    public void selectFilmByNum() {
-        view.selectFilmAfterSorting();
-
-        String action = scanner.nextLine();
-
-        if (action.equals("/back")) {
-
-        } else if (Integer.parseInt(action) > (filmsList.size() + 1) || Integer.parseInt(action) < 0) {
-            System.out.println("Вы дебил!");
-            selectFilmByNum();
-        } else {
-            filmsController.printInfoAboutChosenFilm(filmsList.get(Integer.parseInt(action) - 1));
-            buyTicketBySelectedFilm(filmsList.get(Integer.parseInt(action) - 1));
-        }
-    }
-
     public void buyTicketBySelectedFilm(Films films) {
         view.askToBuyATicket();
 
@@ -72,6 +54,32 @@ public class Controller {
         }
     }
 
+    public void selectFilmByNumSortedFilm() {
+        view.selectFilmAfterSorting();
+
+        String action = scanner.nextLine();
+
+        if (action.equals("/back")) {
+            showFilmsList();
+        } else if (Integer.parseInt(action) > (filmsList.size() + 1) || Integer.parseInt(action) < 0) {
+            System.out.println("Вы дебил!");
+            selectFilmByNumSortedFilm();
+        } else {
+            filmsController.printInfoAboutChosenFilm(filmsList.get(Integer.parseInt(action) - 1));
+            buyTicketBySelectedFilm(filmsList.get(Integer.parseInt(action) - 1));
+        }
+    }
+
+    public void selectFilmByNumAllFilms(Integer num) {
+        if (num > (filmsList.size() + 1) || num < 0) {
+            System.out.println("Вы дебил!");
+            selectFilmByNumSortedFilm();
+        } else {
+            filmsController.printInfoAboutChosenFilm(filmsList.get(num - 1));
+            buyTicketBySelectedFilm(filmsList.get(num - 1));
+        }
+    }
+
     public void actionAfterShowFilmList() {
         if(user != null) {
             view.authorisedShowAfterChoseFilm();
@@ -83,18 +91,17 @@ public class Controller {
 
                 if ((filmsList = filmsController.findFilmByArgument(filmsList, scanner.nextLine())).isEmpty()) actionAfterShowFilmList();
 
-                selectFilmByNum();
+                selectFilmByNumSortedFilm();
 
             } else if (action.equals("/back")) {
                 authorisedUser(user);
             } else {
-                try {
-                    int intValue = Integer.parseInt(action);
-                    System.out.println("Число: " + intValue);
-                } catch (NumberFormatException e) {
+                if (action.isEmpty()) {
                     System.out.println("Вы дебил!");
                     actionAfterShowFilmList();
                 }
+
+                selectFilmByNumAllFilms(Integer.parseInt(action)); // dwasdwasdwadsdaw
             }
         } else {
             view.noAuthorisedShowAfterChoseFilm();
@@ -116,7 +123,34 @@ public class Controller {
         }
     }
 
+    public void actionWindowAfterLogInForAdmin() {
+        view.selectActionAfterChoseEdit();
+
+        String action = scanner.nextLine();
+
+        switch (action) {
+            case "1": {
+                
+                break;
+            }
+            case "2": {
+                view.showToAdminCorrectFormatToAddFilm();
+
+                filmsController.addFilmToListByAdmin(scanner.nextLine());
+                actionWindowAfterLogInForAdmin();
+
+                break;
+            }
+            case "3": {
+                authorisedUser(user);
+                break;
+            }
+        }
+    }
+
     public void actionWindowAfterLogIn() {
+        System.out.println("1");
+
         switch (user.getStatus()) {
             case "admin": {
                 String action = scanner.nextLine();
@@ -127,6 +161,7 @@ public class Controller {
                         break;
                     }
                     case "2": {
+                        actionWindowAfterLogInForAdmin();
                         break;
                     }
                     case "3": {
@@ -144,6 +179,7 @@ public class Controller {
                         break;
                     }
                 }
+                break;
             }
             case "user": {
                 String action = scanner.nextLine();
@@ -154,14 +190,11 @@ public class Controller {
                         break;
                     }
                     case "2": {
-                        break;
-                    }
-                    case "3": {
                         user = null;
                         startApp();
                         break;
                     }
-                    case "4": {
+                    case "3": {
                         break;
                     }
                     default: {
@@ -171,6 +204,7 @@ public class Controller {
                         break;
                     }
                 }
+                break;
             }
             default: {
                 break;
