@@ -130,7 +130,7 @@ public class Controller {
 
         switch (action) {
             case "1": {
-                
+
                 break;
             }
             case "2": {
@@ -248,8 +248,8 @@ public class Controller {
             view.signLoginInterface();
             logIn();
         } else if (login.replaceAll(" ","").equals("/reg")) {
-                view.regLoginInterface();
-                regUser();
+            view.regLoginInterface();
+            regUser();
         } else if (matcher.matches()) {
             System.out.println("Вы ввели консольную команду!");
             view.signLoginInterface();

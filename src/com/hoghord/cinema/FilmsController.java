@@ -250,7 +250,7 @@ public class FilmsController {
         String result = "";
 
         try(FileWriter fw = new FileWriter(FILE_PATH, true);
-        BufferedWriter bw = new BufferedWriter(fw)) {
+            BufferedWriter bw = new BufferedWriter(fw)) {
             if (patArray.length == array.length) {
                 Matcher matcher;
 

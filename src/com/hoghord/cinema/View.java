@@ -135,4 +135,6 @@ public class View {
         System.out.println(" name, tickets, DAY, date, time, duration, prise, description ");
         System.out.println("--------------------------------------------------------------");
     }
+
+
 }
