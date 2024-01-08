@@ -4,7 +4,7 @@ public class View {
 
     public void mainInterface() {
         System.out.println("--------------------------------------------");
-        System.out.println("            Enter yout action               ");
+        System.out.println("            Enter your action               ");
         System.out.println("            1. Films list                   ");
         System.out.println("            2. Sign up / sign in            ");
         System.out.println("            3. Exit                         ");
@@ -75,6 +75,15 @@ public class View {
         System.out.println("Enter: ");
     }
 
+    public void authorisedShowAfterChoseFilmForAdmin() {
+        System.out.println("----------------------------------------------");
+        System.out.println("Введите номер фильма для редактирования фильма");
+        System.out.println("     Для фильтрации фильмов напишите /find    ");
+        System.out.println("      Или напишите /back, чтобы вернутся      ");
+        System.out.println("----------------------------------------------");
+        System.out.println("Enter: ");
+    }
+
     public void noAuthorisedShowAfterChoseFilm() {
         System.out.println("--------------------------------------------");
         System.out.println("    Чтобы узнать всю информацию про фильм   ");
@@ -85,7 +94,7 @@ public class View {
         System.out.println("            1. Sign up / sign in            ");
         System.out.println("            2. Exit                         ");
         System.out.println("--------------------------------------------");
-        System.out.println("Enter: ");
+        System.out.println("Your chose: ");
     }
 
     public void showActionsForFindingFilm() {
@@ -134,7 +143,22 @@ public class View {
         System.out.println("                  Формат записи для фильма:                   ");
         System.out.println(" name, tickets, DAY, date, time, duration, prise, description ");
         System.out.println("--------------------------------------------------------------");
+        System.out.println("Enter: ");
     }
 
+    public void showToAdminCorrectFormatToChangeLine() {
+        System.out.println("--------------------------------------------------------------");
+        System.out.println("        Введите название строки, которую надо изменить        ");
+        System.out.println("                        Доступные линии:                      ");
+        System.out.println("     Name|Tickets|Day|Date|Time|Duration|Price|Description    ");
+        System.out.println("--------------------------------------------------------------");
+        System.out.println("Enter: ");
+    }
 
+    public void writeAdminAnswerEditFilm() {
+        System.out.println("--------------------------------------------------------------");
+        System.out.println("            Напишите свое значение для изменения              ");
+        System.out.println("--------------------------------------------------------------");
+        System.out.println("Enter: ");
+    }
 }

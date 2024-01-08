@@ -30,6 +30,15 @@ public class Controller {
         view.filmListHeader();
         filmsList = filmsController.findAllFilms();
         filmsController.printFilmList(filmsList);
+        view.authorisedShowAfterChoseFilm();
+        actionAfterShowFilmList();
+    }
+
+    public void editShowFilmsListForAdmin() {
+        view.filmListHeader();
+        filmsList = filmsController.findAllFilms();
+        filmsController.printFilmList(filmsList);
+        view.authorisedShowAfterChoseFilmForAdmin();
         actionAfterShowFilmList();
     }
 
@@ -38,7 +47,7 @@ public class Controller {
 
         switch (scanner.nextLine()) {
             case "yes": {
-                filmsController.buyTicketAfterSearching(films);
+                filmsController.changeValueInFile(films, 1, "1", filmsList, user.getStatus());
                 authorisedUser(user);
                 break;
             }
@@ -47,7 +56,7 @@ public class Controller {
                 break;
             }
             default: {
-                System.out.println("Вы дебил!");
+                System.out.println("You've entered wrong action!");
                 buyTicketBySelectedFilm(films);
                 break;
             }
@@ -62,7 +71,7 @@ public class Controller {
         if (action.equals("/back")) {
             showFilmsList();
         } else if (Integer.parseInt(action) > (filmsList.size() + 1) || Integer.parseInt(action) < 0) {
-            System.out.println("Вы дебил!");
+            System.out.println("You've entered wrong action!");
             selectFilmByNumSortedFilm();
         } else {
             filmsController.printInfoAboutChosenFilm(filmsList.get(Integer.parseInt(action) - 1));
@@ -70,20 +79,74 @@ public class Controller {
         }
     }
 
-    public void selectFilmByNumAllFilms(Integer num) {
+    public void selectFilmByNumAllFilms(Integer num, String status) {
         if (num > (filmsList.size() + 1) || num < 0) {
-            System.out.println("Вы дебил!");
+            System.out.println("You've entered wrong action!");
             selectFilmByNumSortedFilm();
-        } else {
+        } else if (status.equals("user")) {
             filmsController.printInfoAboutChosenFilm(filmsList.get(num - 1));
             buyTicketBySelectedFilm(filmsList.get(num - 1));
+        } else if (status.equals("admin")) {
+            filmsController.printInfoAboutChosenFilm(filmsList.get(num - 1));
+            view.showToAdminCorrectFormatToChangeLine();
+
+            String adminAction = scanner.nextLine();
+            int adminActionAnswer = selectFilmByNumAllFilmsChecker(adminAction, "action");
+            if (adminActionAnswer == -1) {
+                System.out.println("Wrong action entered!");
+                selectFilmByNumAllFilms(num, status);
+            }
+
+            view.writeAdminAnswerEditFilm();
+
+            String value = scanner.nextLine();
+            int adminValueAnswer = selectFilmByNumAllFilmsChecker(value, "value");
+            if (adminValueAnswer == -1) {
+                System.out.println("Wrong data entered, check your value!");
+                selectFilmByNumAllFilms(num, status);
+            }
+
+            System.out.println(value);
+
+            filmsController.changeValueInFile(filmsList.get(num - 1), adminActionAnswer, value, filmsList, user.getStatus());
+
+            editShowFilmsListForAdmin();
         }
+    }
+
+    public int selectFilmByNumAllFilmsChecker(String value, String action) {
+        Pattern[] PATT_TO_EDIT_FIELD = {Pattern.compile("[nN]ame"), Pattern.compile("[tT]icket(s)?"),
+                Pattern.compile("[dD]ay"), Pattern.compile("[dD]ate"), Pattern.compile("[tT]ime"),
+                Pattern.compile("[dD]urati?o?n?"), Pattern.compile("[pP]rice"), Pattern.compile("[dD]escr?i?p?t?i?o?n?")};
+        Pattern[] PATT_ARRAY = {Pattern.compile("(.+)"), Pattern.compile("(\\d+)"),
+                Pattern.compile("(.+)"), Pattern.compile("(\\d{2}-\\d{2}-\\d{4})"),
+                Pattern.compile("(\\d{2}:\\d{2})"), Pattern.compile("(\\d+)"),
+                Pattern.compile("((\\d+\\.\\d+\\$)|(\\d+)\\$)"), Pattern.compile("(.+)")};
+
+        int numArray = -1;
+
+        if (action.equals("action")) {
+            for (int i = 0; i < PATT_TO_EDIT_FIELD.length; i++) {
+                if (PATT_TO_EDIT_FIELD[i].matcher(value).matches()) {
+                    numArray = i;
+                    break;
+                }
+            }
+        }
+        if (action.equals("value")) {
+            for (int i = 0; i < PATT_ARRAY.length; i++) {
+                if (PATT_ARRAY[i].matcher(value).matches()) {
+                    numArray = 1;
+                    break;
+                }
+            }
+        }
+
+        return numArray;
     }
 
     public void actionAfterShowFilmList() {
         if(user != null) {
-            view.authorisedShowAfterChoseFilm();
-
             String action = scanner.nextLine();
 
             if (action.equals("/find")) {
@@ -97,11 +160,11 @@ public class Controller {
                 authorisedUser(user);
             } else {
                 if (action.isEmpty()) {
-                    System.out.println("Вы дебил!");
+                    System.out.println("You've entered wrong action!");
                     actionAfterShowFilmList();
                 }
 
-                selectFilmByNumAllFilms(Integer.parseInt(action));
+                selectFilmByNumAllFilms(Integer.parseInt(action), user.getStatus());
             }
         } else {
             view.noAuthorisedShowAfterChoseFilm();
@@ -115,7 +178,7 @@ public class Controller {
                     break;
                 }
                 default: {
-                    System.out.println("Вы дебил!");
+                    System.out.println("You've entered wrong action!");
                     actionAfterShowFilmList();
                     break;
                 }
@@ -130,7 +193,7 @@ public class Controller {
 
         switch (action) {
             case "1": {
-
+                editShowFilmsListForAdmin();
                 break;
             }
             case "2": {
@@ -170,7 +233,7 @@ public class Controller {
                         break;
                     }
                     default: {
-                        System.out.println("Вы дебыл!");
+                        System.out.println("You've entered wrong action!");
                         view.adminInterface();
                         actionWindowAfterLogIn();
                         break;
@@ -195,7 +258,7 @@ public class Controller {
                         break;
                     }
                     default: {
-                        System.out.println("Вы дебыл!");
+                        System.out.println("You've entered wrong action!");
                         view.userInterface();
                         actionWindowAfterLogIn();
                         break;
@@ -244,14 +307,14 @@ public class Controller {
         Matcher matcher = regExp.matcher(login.replaceAll(" ",""));
 
         if (login.isEmpty()) {
-            System.out.println("Вы ввели не коректные данные");
+            System.out.println("You've entered wrong data!");
             view.signLoginInterface();
             logIn();
         } else if (login.replaceAll(" ","").equals("/reg")) {
             view.regLoginInterface();
             regUser();
         } else if (matcher.matches()) {
-            System.out.println("Вы ввели консольную команду!");
+            System.out.println("You've entered console command!");
             view.signLoginInterface();
             logIn();
         } else {
@@ -260,10 +323,10 @@ public class Controller {
             String password = scanner.nextLine();
 
             if ((user = (userReader.findUser(login, password))) != null) {
-                System.out.println("Вы успешно ввошли в систему!");
+                System.out.println("You have successfully logged in!");
                 startApp();
             } else {
-                System.out.println("Пользователь не найден или был введён не правильный пароль!");
+                System.out.println("The user has not found or the wrong password has been entered!");
                 startApp();
             }
         }
@@ -278,7 +341,7 @@ public class Controller {
             String password = scanner.nextLine();
 
             if (login.isEmpty() || password.isEmpty()) {
-                System.out.println("Вы ввели не коректные данные!");
+                System.out.println("You've entered wrong data!");
                 view.regLoginInterface();
                 regUser();
             }
@@ -286,7 +349,7 @@ public class Controller {
             if ((user = userReader.addUser(login, password)) != null) startApp();
 
         } else {
-            System.out.println("Такой логин уже создан, выберите другой!");
+            System.out.println("This login has already been created, please select another one!");
             view.regLoginInterface();
             regUser();
         }

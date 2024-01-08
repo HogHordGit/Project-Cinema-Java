@@ -1,13 +1,10 @@
 package com.hoghord.cinema;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,7 +16,7 @@ public class FilmsController {
     private static final Pattern TICKETS_FILM_PAT = Pattern.compile("Tickets: (\\d+)");
     private static final Pattern DURATION_FILM_PAT = Pattern.compile("Duration: (\\d+)");
 
-    private static final Pattern PRISE_FILM_PAT = Pattern.compile("Prise: (\\d+\\.\\d+\\$)");
+    private static final Pattern PRISE_FILM_PAT = Pattern.compile("Price: (\\d+\\.\\d+\\$)");
 
     private static final Pattern DESCRIPTION_FILM_PAT = Pattern.compile("Description: (.+)");
 
@@ -31,6 +28,10 @@ public class FilmsController {
     private static DaysOfWeek todaysDay = DaysOfWeek.valueOf("MONDAY");
 
     ArrayList<Films> sortedFilms = new ArrayList<>();
+
+    final String[] infoStrArray = {"Name: ", "Tickets: ", "Day: ", "Date: ", "Time: ", "Duration: ", "Price: ", "Description: "};
+
+    Integer gay = 0;
 
     public ArrayList<Films> findAllFilms() {
 
@@ -60,7 +61,10 @@ public class FilmsController {
                     if (matcher.matches()) {
                         filmTickets = Short.parseShort(matcher.group(1));
 
-                        if (filmTickets == 0) continue;
+                        if (filmTickets == 0) {
+                            gay = 10;
+                            continue;
+                        };
 
                         line = br.readLine().trim();
 
@@ -115,29 +119,46 @@ public class FilmsController {
         return films;
     }
 
-    public void buyTicketAfterSearching(Films films) {
+    public void changeValueInFile(Films films, int action, String value, ArrayList<Films> check, String status) {
+        int checkOnSpace = 0;
+
         try (BufferedReader br = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
             StringBuilder content = new StringBuilder();
 
             while ((line = br.readLine()) != null) {
+                checkOnSpace++;
                 if (line.contains("Name: " + films.getName())) {
-                    content.append(line).append("\n");
-                    line = br.readLine().trim();
 
-                    if (line.matches("Tickets: (\\d+)")) {
-                        int num = Integer.parseInt(line.replaceAll("Tickets: ", "").trim()) - 1;
+                    for (int i = 0; i < action; i++) {
+                        content.append(line).append("\n");
 
-                        line = line.replaceFirst("Tickets: \\d+", "Tickets: " + num);
+                        line = br.readLine().trim();
+                    }
+
+                    if (line.matches(infoStrArray[action] + ".+")) {
+                        try {
+                            int checkNum = Integer.parseInt(value);
+
+                            int num = status.equals("user") ? Integer.parseInt(line.replaceAll(infoStrArray[action], "").trim()) - checkNum : checkNum;
+
+                            line = line.replaceFirst(infoStrArray[action] + ".+", infoStrArray[action] + num);
+                        } catch (NumberFormatException e) {
+//                            System.out.println("line");
+//                            System.out.println(infoStrArray[numArray]);
+//                            System.out.println(numArray);
+                            line = line.replaceFirst(infoStrArray[action] + ".+", infoStrArray[action] + value);
+                        }
                     }
                 }
+
                 content.append(line).append("\n");
             }
 
-            // Записываем новое содержимое в файл
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH))) {
                 bw.write(content.toString());
-                System.out.println("Билет успешно куплен!");
+
+                System.out.println(status.equals("user") ? "Ticket purchased successfully!" : "Data changed successfully!");
             }
 
         } catch (IOException e) {
@@ -164,11 +185,11 @@ public class FilmsController {
     public void printInfoAboutChosenFilm(Films films) {
         System.out.println("Name: " + films.getName() + "\n"
                 + films.getDescription() + "\n" + "\n"
-                + "Продолжительность: " + films.getDuration() + "\n" + "\n"
+                + "Duration: " + films.getDuration() + " minutes" + "\n" + "\n"
                 + films.getDate() + "/" + films.getTime() + "\n"
                 + films.getDay() + "\n" + "\n"
-                + "Доступные билеты: " + films.getTickets() + "\n"
-                + "Цена билета: " + films.getPrise()
+                + "Available tickets: " + films.getTickets() + "\n"
+                + "Ticket price: " + films.getPrise()
         );
     }
 
@@ -182,7 +203,7 @@ public class FilmsController {
         } else if (Pattern.compile("(^\\w+$)").matcher(value.replaceAll(" ","").trim()).matches()) {
             return findFilmByName(array, value);
         } else {
-            System.out.println("Вы ввели некоректный формат");
+            System.out.println("You entered an incorrect format!");
             return sortedFilms;
         }
     }
@@ -192,7 +213,7 @@ public class FilmsController {
             if (array.get(i).getDate().equals(value)) sortedFilms.add(array.get(i));
         }
         if (sortedFilms.isEmpty()) {
-            System.out.println("Фильм/фильмы не были найдена по вашему запросу.");
+            System.out.println("The film/films were not found for your request.");
             return sortedFilms;
         } else {
             printFilmList(sortedFilms);
@@ -205,7 +226,7 @@ public class FilmsController {
             if (array.get(i).getTime().equals(value)) sortedFilms.add(array.get(i));
         }
         if (sortedFilms.isEmpty()) {
-            System.out.println("Фильм/фильмы не были найдена по вашему запросу.");
+            System.out.println("The film/films were not found for your request.");
             return sortedFilms;
         } else {
             printFilmList(sortedFilms);
@@ -218,7 +239,7 @@ public class FilmsController {
             if (value <= array.get(i).getTickets()) sortedFilms.add(array.get(i));
         }
         if (sortedFilms.isEmpty()) {
-            System.out.println("Фильм/фильмы не были найдены по вашему запросу.");
+            System.out.println("The film/films were not found for your request.");
             return sortedFilms;
         } else {
             printFilmList(sortedFilms);
@@ -231,7 +252,7 @@ public class FilmsController {
             if (array.get(i).getName().trim().equalsIgnoreCase(value.trim())) sortedFilms.add(array.get(i));
         }
         if (sortedFilms.isEmpty()) {
-            System.out.println("Фильм/фильмы не были найдена по вашему запросу.");
+            System.out.println("The film/films were not found for your request.");
             return sortedFilms;
         } else {
             printFilmList(sortedFilms);
@@ -241,10 +262,9 @@ public class FilmsController {
 
     public void addFilmToListByAdmin(String film) {
         Pattern[] patArray = {Pattern.compile("(.+)"), Pattern.compile("(\\d+)"),
-                Pattern.compile(""), Pattern.compile("(\\d{2}-\\d{2}-\\d{4})"),
+                Pattern.compile("(.+)"), Pattern.compile("(\\d{2}-\\d{2}-\\d{4})"),
                 Pattern.compile("(\\d{2}:\\d{2})"), Pattern.compile("(\\d+)"),
                 Pattern.compile("((\\d+\\.\\d+\\$)|(\\d+)\\$)"), Pattern.compile("(.+)")};
-        String[] infoStrArray = {"Name: ", "Tickets: ", "Day: ", "Date: ", "Time: ", "Duration: ", "Prise: ", "Description: "};
         String[] array = film.split(", ");
 
         String result = "";
@@ -269,9 +289,9 @@ public class FilmsController {
                 bw.write(result);
 
                 bw.write("---");
-                System.out.println("Фильм успешно добавлен");
+                System.out.println("Film added successfully");
             } else {
-                System.out.println("Админ ты конч, заново!");
+                System.out.println("You entered an incorrect format!");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

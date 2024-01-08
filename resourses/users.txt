@@ -9,22 +9,7 @@ Password: 1234
 Status: user
 ---
 ---
-Login: gay
-Password: gay
+Login: admin
+Password: admin
 Status: admin
----
----
-Login: pisun
-Password: 123
-Status: user
----
----
-Login: uuuu
-Password: 123
-Status: user
----
----
-Login: MishaLox
-Password: MishaLox123
-Status: user
 ---
