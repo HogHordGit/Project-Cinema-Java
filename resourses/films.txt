@@ -1,5 +1,5 @@
 ---
-Name: Hot boobs forever
+Name: Emerald
 Tickets: 10
 Day: MONDAY
 Date: 27-12-2023
@@ -9,7 +9,7 @@ Price: 4.99$
 Description: Good film with excellent plot
 ---
 ---
-Name: Hot black boys
+Name: Boys
 Tickets: 15
 Day: TUESDAY
 Date: 28-12-2023
@@ -19,7 +19,7 @@ Price: 4.99$
 Description: Good film with excellent plot
 ---
 ---
-Name: Spanchbob right version
+Name: Spanchbob
 Tickets: 2
 Day: WEDNESDAY
 Date: 29-12-2023
