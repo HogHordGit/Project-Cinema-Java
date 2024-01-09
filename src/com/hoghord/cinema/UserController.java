@@ -51,7 +51,7 @@ public class UserController {
                                     TagClosed = true;
                                     return new User(matchLogin, matchPassword, matchStatus);
                                 } else {
-                                    throw new IOException("Ошибка при чтении базы данных, проверте на правильность оформления!");
+                                    throw new IOException("Error reading the database, please check the formatting is correct!");
                                 }
                             }
                         }
